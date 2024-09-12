@@ -1,37 +1,26 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import LoginScreen from './screens/LoginScreen';
+import PokemonListScreen from './screens/PokemonListScreen';
+import PokemonDetailScreen from './screens/PokemonDetailScreen';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+const Stack = createStackNavigator();
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
+const App = () => {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
+      <Stack.Navigator initialRouteName="screens/LoginScreen">
+        <Stack.Screen name="screens/LoginScreen" component={LoginScreen} options={{
+          headerShown: false,
+        }}/>
+        <Stack.Screen name="screens/PokemonListScreen" component={PokemonListScreen} options={{
+          headerShown: false,
+        }}/>
+        <Stack.Screen name="screens/PokemonDetailScreen" component={PokemonDetailScreen} options={{
+          headerShown: true,
+          title:'Detalles Pokemon'
+        }}/>
+      </Stack.Navigator>
   );
-}
+};
+
+export default App;
